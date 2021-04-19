@@ -1,5 +1,5 @@
 // Control Props
-// http://localhost:3000/isolated/exercise/06.js
+// http://localhost:3000/isolated/final/06.js
 
 import * as React from 'react'
 import {Switch} from '../switch'
@@ -29,24 +29,23 @@ function useToggle({
   initialOn = false,
   reducer = toggleReducer,
   onChange,
-  controlledOn
+  on: controlledOn,
 } = {}) {
   const {current: initialState} = React.useRef({on: initialOn})
   const [state, dispatch] = React.useReducer(reducer, initialState)
-  let onIsControlled = controlledOn != null
-
+  const onIsControlled = controlledOn != null
   const on = onIsControlled ? controlledOn : state.on
 
-  const dispatchWithOnChange = (action) => {
+  function dispatchWithOnChange(action) {
     if (!onIsControlled) {
       dispatch(action)
-    } else {
-      onChange?.(reducer({...state, on}, action), action)
     }
+    onChange?.(reducer({...state, on}, action), action)
   }
 
   const toggle = () => dispatchWithOnChange({type: actionTypes.toggle})
-  const reset = () => dispatchWithOnChange({type: actionTypes.reset, initialState})
+  const reset = () =>
+    dispatchWithOnChange({type: actionTypes.reset, initialState})
 
   function getTogglerProps({onClick, ...props} = {}) {
     return {
@@ -129,5 +128,5 @@ export {Toggle}
 
 /*
 eslint
-  no-unused-vars: "off",
+  no-unused-expressions: "off",
 */
